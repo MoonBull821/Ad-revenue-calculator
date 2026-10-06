@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body { font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #0d1117; color: #c9d1d9; }
+h2 { color: #58a6ff; border-bottom: 1px solid #30363d; padding-bottom: 10px; }
+.slider-container { margin: 20px 0; }
+label { display: block; margin-bottom: 5px; font-weight: 600; }
+input[type="range"] { width: 100%; }
+.value-display { color: #58a6ff; font-weight: bold; margin-left: 10px; }
+select { width: 100%; padding: 8px; background: #21262d; border: 1px solid #30363d; color: #c9d1d9; border-radius: 6px; }
+.result-box { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-top: 20px; }
+.result-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #21262d; }
+.result-row:last-child { border-bottom: none; font-size: 1.2em; font-weight: bold; color: #3fb950; }
+</style>
+</head>
+<body>
+
+<h2>Build in El Salvador - Revenue Calculator</h2>
+
+<div class="slider-container">
+<label>YouTube Views/Month: <span class="value-display" id="ytViewsVal">75,000</span></label>
+<input type="range" id="ytViews" min="0" max="500000" step="5000" value="75000" oninput="calculate()">
+</div>
+
+<div class="slider-container">
+<label>Facebook Views/Month: <span class="value-display" id="fbViewsVal">300,000</span></label>
+<input type="range" id="fbViews" min="0" max="1000000" step="10000" value="300000" oninput="calculate()">
+</div>
+
+<div class="slider-container">
+<label>Audience Type:</label>
+<select id="audience" onchange="calculate()">
+<option value="latam">Latin America (Low RPM: $0.50-$2)</option>
+<option value="mixed" selected>Mixed/Global (Med RPM: $2-$6)</option>
+<option value="us">US/Finance Focused (High RPM: $6-$15)</option>
+</select>
+</div>
+
+<div class="slider-container">
+<label>YouTube % Long-form (vs Shorts): <span class="value-display" id="longformVal">50%</span></label>
+<input type="range" id="longform" min="0" max="100" value="50" oninput="calculate()">
+</div>
+
+<div class="result-box">
+<div class="result-row"><span>YouTube Revenue:</span><span id="ytRevenue">$0</span></div>
+<div class="result-row"><span>Facebook Revenue:</span><span id="fbRevenue">$0</span></div>
+<div class="result-row"><span>TOTAL MONTHLY:</span><span id="totalRevenue">$0</span></div>
+</div>
+
+<script>
+function calculate() {
+  const ytViews = parseInt(document.getElementById('ytViews').value);
+  const fbViews = parseInt(document.getElementById('fbViews').value);
+  const audience = document.getElementById('audience').value;
+  const longformPct = parseInt(document.getElementById('longform').value);
+  
+  document.getElementById('ytViewsVal').textContent = ytViews.toLocaleString();
+  document.getElementById('fbViewsVal').textContent = fbViews.toLocaleString();
+  document.getElementById('longformVal').textContent = longformPct + '%';
+  
+  let ytRPM, fbRPM;
+  if (audience === 'latam') { ytRPM = 1.5; fbRPM = 0.80; }
+  else if (audience === 'mixed') { ytRPM = 4; fbRPM = 2; }
+  else { ytRPM = 10; fbRPM = 4; }
+  
+  // Shorts pay ~1/10th of long-form
+  const shortsMultiplier = 0.10;
+  const effectiveYTRPM = (ytRPM * (longformPct/100)) + (ytRPM * shortsMultiplier * ((100-longformPct)/100));
+  
+  const ytRevenue = (ytViews * effectiveYTRPM) / 1000;
+  const fbRevenue = (fbViews * fbRPM) / 1000;
+  
+  document.getElementById('ytRevenue').textContent = '$' + ytRevenue.toFixed(0);
+  document.getElementById('fbRevenue').textContent = '$' + fbRevenue.toFixed(0);
+  document.getElementById('totalRevenue').textContent = '$' + (ytRevenue + fbRevenue).toFixed(0);
+}
+calculate();
+</script>
+
+</body>
+</html>
