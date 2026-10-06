@@ -1,82 +1,147 @@
-<!DOCTYPE html>
-<html>
-<head>
+<div id="app">
+  <div class="presets">
+    <button class="pbtn active" data-p="0">Spanish, local audience</button>
+    <button class="pbtn" data-p="1">Mixed</button>
+    <button class="pbtn" data-p="2">English, US investor audience</button>
+  </div>
+
+  <div class="grid">
+    <div class="col">
+      <div class="colhead">Facebook</div>
+      <div class="row"><label>Monthly views</label><span id="fbvOut" class="val">300,000</span></div>
+      <input type="range" id="fbv" min="50000" max="1000000" step="10000" value="300000">
+      <div class="row"><label>Qualified view rate</label><span id="fbqOut" class="val">45%</span></div>
+      <input type="range" id="fbq" min="20" max="80" step="1" value="45">
+      <div class="row"><label>RPM per 1,000 qualified</label><span id="fbrOut" class="val">$0.08</span></div>
+      <input type="range" id="fbr" min="1" max="800" step="1" value="8">
+      <div class="note" id="fbNote">~135,000 qualified views</div>
+    </div>
+
+    <div class="col">
+      <div class="colhead">YouTube</div>
+      <div class="row"><label>Monthly views</label><span id="ytvOut" class="val">75,000</span></div>
+      <input type="range" id="ytv" min="10000" max="500000" step="5000" value="75000">
+      <div class="row"><label>Long-form share</label><span id="ytsOut" class="val">80%</span></div>
+      <input type="range" id="yts" min="0" max="100" step="5" value="80">
+      <div class="row"><label>Long-form RPM</label><span id="ytrOut" class="val">$1.50</span></div>
+      <input type="range" id="ytr" min="25" max="3000" step="25" value="150">
+      <div class="row"><label>Shorts RPM</label><span id="yssOut" class="val">$0.03</span></div>
+      <input type="range" id="yss" min="1" max="30" step="1" value="3">
+      <div class="note" id="ytNote">60,000 long-form / 15,000 Shorts</div>
+    </div>
+  </div>
+
+  <div class="results">
+    <div class="rcard"><div class="rlab">Facebook</div><div class="rval" id="rFb">$11</div><div class="rsub">per month</div></div>
+    <div class="rcard"><div class="rlab">YouTube</div><div class="rval" id="rYt">$90</div><div class="rsub">per month</div></div>
+    <div class="rcard primary"><div class="rlab">Combined</div><div class="rval" id="rTot">$101</div><div class="rsub" id="rYr">$1,213 per year</div></div>
+  </div>
+
+  <div class="bar">
+    <div class="barseg fb" id="barFb"></div>
+    <div class="barseg yt" id="barYt"></div>
+  </div>
+  <div class="legend">
+    <span><i class="sw fb"></i>Facebook</span>
+    <span><i class="sw yt"></i>YouTube</span>
+  </div>
+
+  <div class="compare">
+    <div class="crow"><span>Ad revenue, annual</span><strong id="cAd">$1,213</strong></div>
+    <div class="crow"><span>One incorporation client at $2,500</span><strong>$2,500</strong></div>
+    <div class="crow"><span>One residency package at $6,000</span><strong>$6,000</strong></div>
+    <div class="crow"><span>One real estate commission at $15,000</span><strong>$15,000</strong></div>
+  </div>
+  <div class="foot">RPM ranges are modelled from publicly reported creator data, not official figures. Neither Meta nor Google publishes RPM by country or niche. Treat as an order-of-magnitude model.</div>
+</div>
+
 <style>
-body { font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #0d1117; color: #c9d1d9; }
-h2 { color: #58a6ff; border-bottom: 1px solid #30363d; padding-bottom: 10px; }
-.slider-container { margin: 20px 0; }
-label { display: block; margin-bottom: 5px; font-weight: 600; }
-input[type="range"] { width: 100%; }
-.value-display { color: #58a6ff; font-weight: bold; margin-left: 10px; }
-select { width: 100%; padding: 8px; background: #21262d; border: 1px solid #30363d; color: #c9d1d9; border-radius: 6px; }
-.result-box { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-top: 20px; }
-.result-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #21262d; }
-.result-row:last-child { border-bottom: none; font-size: 1.2em; font-weight: bold; color: #3fb950; }
+#app { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; color: var(--host-fg); width: 100%; font-weight: 400; }
+.presets { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+.pbtn { font-family: inherit; font-size: 12px; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--host-border); background: transparent; color: var(--host-fg-muted); cursor: pointer; font-weight: 400; }
+.pbtn.active { background: var(--host-primary); color: #fff; border-color: var(--host-primary); font-weight: 500; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.col { background: var(--host-card); border: 1px solid var(--host-border); border-radius: 12px; padding: 14px 16px 16px; }
+.colhead { font-size: 13px; font-weight: 500; color: var(--host-fg); margin-bottom: 12px; }
+.row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; }
+.row label { font-size: 11px; color: var(--host-fg-muted); }
+.val { font-size: 12px; font-weight: 500; color: var(--host-fg); font-variant-numeric: tabular-nums; }
+input[type=range] { width: 100%; margin-top: 5px; accent-color: var(--host-primary); background: transparent; }
+.note { font-size: 11px; color: var(--host-fg-muted); margin-top: 12px; }
+.results { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 18px; }
+.rcard { border: 1px solid var(--host-border); border-radius: 12px; padding: 12px 14px; }
+.rcard.primary { border-color: var(--host-primary); }
+.rlab { font-size: 11px; color: var(--host-fg-muted); }
+.rval { font-size: 24px; font-weight: 500; color: var(--host-fg); margin-top: 3px; font-variant-numeric: tabular-nums; }
+.rsub { font-size: 11px; color: var(--host-fg-muted); margin-top: 2px; }
+.bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 16px; background: var(--host-muted); }
+.barseg { height: 100%; transition: width .15s; }
+.barseg.fb { background: #3b82f6; }
+.barseg.yt { background: #ef4444; }
+.legend { display: flex; gap: 16px; margin-top: 8px; font-size: 11px; color: var(--host-fg-muted); }
+.legend span { display: flex; align-items: center; gap: 5px; }
+.sw { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+.sw.fb { background: #3b82f6; } .sw.yt { background: #ef4444; }
+.compare { margin-top: 20px; border-top: 1px solid var(--host-border); padding-top: 12px; }
+.crow { display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px; color: var(--host-fg-muted); }
+.crow strong { font-weight: 500; color: var(--host-fg); font-variant-numeric: tabular-nums; }
+.foot { margin-top: 14px; font-size: 11px; color: var(--host-fg-muted); line-height: 1.5; }
+@media (max-width: 560px) { .grid, .results { grid-template-columns: 1fr; } }
 </style>
-</head>
-<body>
-
-<h2>Build in El Salvador - Revenue Calculator</h2>
-
-<div class="slider-container">
-<label>YouTube Views/Month: <span class="value-display" id="ytViewsVal">75,000</span></label>
-<input type="range" id="ytViews" min="0" max="500000" step="5000" value="75000" oninput="calculate()">
-</div>
-
-<div class="slider-container">
-<label>Facebook Views/Month: <span class="value-display" id="fbViewsVal">300,000</span></label>
-<input type="range" id="fbViews" min="0" max="1000000" step="10000" value="300000" oninput="calculate()">
-</div>
-
-<div class="slider-container">
-<label>Audience Type:</label>
-<select id="audience" onchange="calculate()">
-<option value="latam">Latin America (Low RPM: $0.50-$2)</option>
-<option value="mixed" selected>Mixed/Global (Med RPM: $2-$6)</option>
-<option value="us">US/Finance Focused (High RPM: $6-$15)</option>
-</select>
-</div>
-
-<div class="slider-container">
-<label>YouTube % Long-form (vs Shorts): <span class="value-display" id="longformVal">50%</span></label>
-<input type="range" id="longform" min="0" max="100" value="50" oninput="calculate()">
-</div>
-
-<div class="result-box">
-<div class="result-row"><span>YouTube Revenue:</span><span id="ytRevenue">$0</span></div>
-<div class="result-row"><span>Facebook Revenue:</span><span id="fbRevenue">$0</span></div>
-<div class="result-row"><span>TOTAL MONTHLY:</span><span id="totalRevenue">$0</span></div>
-</div>
 
 <script>
-function calculate() {
-  const ytViews = parseInt(document.getElementById('ytViews').value);
-  const fbViews = parseInt(document.getElementById('fbViews').value);
-  const audience = document.getElementById('audience').value;
-  const longformPct = parseInt(document.getElementById('longform').value);
-  
-  document.getElementById('ytViewsVal').textContent = ytViews.toLocaleString();
-  document.getElementById('fbViewsVal').textContent = fbViews.toLocaleString();
-  document.getElementById('longformVal').textContent = longformPct + '%';
-  
-  let ytRPM, fbRPM;
-  if (audience === 'latam') { ytRPM = 1.5; fbRPM = 0.80; }
-  else if (audience === 'mixed') { ytRPM = 4; fbRPM = 2; }
-  else { ytRPM = 10; fbRPM = 4; }
-  
-  // Shorts pay ~1/10th of long-form
-  const shortsMultiplier = 0.10;
-  const effectiveYTRPM = (ytRPM * (longformPct/100)) + (ytRPM * shortsMultiplier * ((100-longformPct)/100));
-  
-  const ytRevenue = (ytViews * effectiveYTRPM) / 1000;
-  const fbRevenue = (fbViews * fbRPM) / 1000;
-  
-  document.getElementById('ytRevenue').textContent = '$' + ytRevenue.toFixed(0);
-  document.getElementById('fbRevenue').textContent = '$' + fbRevenue.toFixed(0);
-  document.getElementById('totalRevenue').textContent = '$' + (ytRevenue + fbRevenue).toFixed(0);
-}
-calculate();
-</script>
+(function(){
+  var ids = ['fbv','fbq','fbr','ytv','yts','ytr','yss'];
+  var el = {}; ids.forEach(function(i){ el[i] = document.getElementById(i); });
+  var presets = [
+    { fbr: 8,   ytr: 150,  yss: 3,  fbq: 45, yts: 80 },
+    { fbr: 50,  ytr: 600,  yss: 8,  fbq: 48, yts: 80 },
+    { fbr: 150, ytr: 1600, yss: 15, fbq: 50, yts: 85 }
+  ];
+  function money(n){
+    if (n >= 100) return '$' + Math.round(n).toLocaleString();
+    if (n >= 10)  return '$' + n.toFixed(0);
+    return '$' + n.toFixed(2);
+  }
+  function calc(){
+    var fbv = +el.fbv.value, fbq = +el.fbq.value, fbr = +el.fbr.value / 100;
+    var ytv = +el.ytv.value, yts = +el.yts.value, ytr = +el.ytr.value / 100, yss = +el.yss.value / 100;
+    var qualified = fbv * fbq / 100;
+    var fbRev = qualified / 1000 * fbr;
+    var longV = ytv * yts / 100, shortV = ytv - longV;
+    var ytRev = longV / 1000 * ytr + shortV / 1000 * yss;
+    var tot = fbRev + ytRev;
 
-</body>
-</html>
+    document.getElementById('fbvOut').textContent = fbv.toLocaleString();
+    document.getElementById('fbqOut').textContent = fbq + '%';
+    document.getElementById('fbrOut').textContent = '$' + fbr.toFixed(2);
+    document.getElementById('fbNote').textContent = '~' + Math.round(qualified).toLocaleString() + ' qualified views';
+    document.getElementById('ytvOut').textContent = ytv.toLocaleString();
+    document.getElementById('ytsOut').textContent = yts + '%';
+    document.getElementById('ytrOut').textContent = '$' + ytr.toFixed(2);
+    document.getElementById('yssOut').textContent = '$' + yss.toFixed(2);
+    document.getElementById('ytNote').textContent = Math.round(longV).toLocaleString() + ' long-form / ' + Math.round(shortV).toLocaleString() + ' Shorts';
+
+    document.getElementById('rFb').textContent = money(fbRev);
+    document.getElementById('rYt').textContent = money(ytRev);
+    document.getElementById('rTot').textContent = money(tot);
+    document.getElementById('rYr').textContent = money(tot * 12) + ' per year';
+    document.getElementById('cAd').textContent = money(tot * 12);
+
+    var pf = tot > 0 ? fbRev / tot * 100 : 0;
+    document.getElementById('barFb').style.width = pf + '%';
+    document.getElementById('barYt').style.width = (100 - pf) + '%';
+  }
+  ids.forEach(function(i){ el[i].addEventListener('input', calc); });
+  document.querySelectorAll('.pbtn').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.pbtn').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      var p = presets[+b.dataset.p];
+      Object.keys(p).forEach(function(k){ el[k].value = p[k]; });
+      calc();
+    });
+  });
+  calc();
+})();
+</script>
