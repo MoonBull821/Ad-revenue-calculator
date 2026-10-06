@@ -1,3 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build in El Salvador — ad revenue model</title>
+<style>
+  body { background: #ffffff; margin: 0; padding: 24px 16px; display: flex; justify-content: center; }
+  #app { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; color: #111827; width: 100%; max-width: 700px; font-weight: 400; }
+  .presets { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+  .pbtn { font-family: inherit; font-size: 12px; padding: 7px 12px; border-radius: 8px; border: 1px solid #e5e7eb; background: transparent; color: #6b7280; cursor: pointer; font-weight: 400; }
+  .pbtn.active { background: #3b82f6; color: #fff; border-color: #3b82f6; font-weight: 500; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .col { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px 16px 16px; }
+  .colhead { font-size: 13px; font-weight: 500; color: #111827; margin-bottom: 12px; }
+  .row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; }
+  .row label { font-size: 11px; color: #6b7280; }
+  .val { font-size: 12px; font-weight: 500; color: #111827; font-variant-numeric: tabular-nums; }
+  input[type=range] { width: 100%; margin-top: 5px; accent-color: #3b82f6; background: transparent; }
+  .note { font-size: 11px; color: #6b7280; margin-top: 12px; }
+  .results { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 18px; }
+  .rcard { border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px 14px; }
+  .rcard.primary { border-color: #3b82f6; }
+  .rlab { font-size: 11px; color: #6b7280; }
+  .rval { font-size: 24px; font-weight: 500; color: #111827; margin-top: 3px; font-variant-numeric: tabular-nums; }
+  .rsub { font-size: 11px; color: #6b7280; margin-top: 2px; }
+  .bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 16px; background: #f3f4f6; }
+  .barseg { height: 100%; transition: width .15s; }
+  .barseg.fb { background: #3b82f6; }
+  .barseg.yt { background: #ef4444; }
+  .legend { display: flex; gap: 16px; margin-top: 8px; font-size: 11px; color: #6b7280; }
+  .legend span { display: flex; align-items: center; gap: 5px; }
+  .sw { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+  .sw.fb { background: #3b82f6; } .sw.yt { background: #ef4444; }
+  .compare { margin-top: 20px; border-top: 1px solid #e5e7eb; padding-top: 12px; }
+  .crow { display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px; color: #6b7280; }
+  .crow strong { font-weight: 500; color: #111827; font-variant-numeric: tabular-nums; }
+  .foot { margin-top: 14px; font-size: 11px; color: #6b7280; line-height: 1.5; }
+  @media (max-width: 560px) { .grid, .results { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
 <div id="app">
   <div class="presets">
     <button class="pbtn active" data-p="0">Spanish, local audience</button>
@@ -55,40 +98,6 @@
   <div class="foot">RPM ranges are modelled from publicly reported creator data, not official figures. Neither Meta nor Google publishes RPM by country or niche. Treat as an order-of-magnitude model.</div>
 </div>
 
-<style>
-#app { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; color: var(--host-fg); width: 100%; font-weight: 400; }
-.presets { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
-.pbtn { font-family: inherit; font-size: 12px; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--host-border); background: transparent; color: var(--host-fg-muted); cursor: pointer; font-weight: 400; }
-.pbtn.active { background: var(--host-primary); color: #fff; border-color: var(--host-primary); font-weight: 500; }
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.col { background: var(--host-card); border: 1px solid var(--host-border); border-radius: 12px; padding: 14px 16px 16px; }
-.colhead { font-size: 13px; font-weight: 500; color: var(--host-fg); margin-bottom: 12px; }
-.row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; }
-.row label { font-size: 11px; color: var(--host-fg-muted); }
-.val { font-size: 12px; font-weight: 500; color: var(--host-fg); font-variant-numeric: tabular-nums; }
-input[type=range] { width: 100%; margin-top: 5px; accent-color: var(--host-primary); background: transparent; }
-.note { font-size: 11px; color: var(--host-fg-muted); margin-top: 12px; }
-.results { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 18px; }
-.rcard { border: 1px solid var(--host-border); border-radius: 12px; padding: 12px 14px; }
-.rcard.primary { border-color: var(--host-primary); }
-.rlab { font-size: 11px; color: var(--host-fg-muted); }
-.rval { font-size: 24px; font-weight: 500; color: var(--host-fg); margin-top: 3px; font-variant-numeric: tabular-nums; }
-.rsub { font-size: 11px; color: var(--host-fg-muted); margin-top: 2px; }
-.bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 16px; background: var(--host-muted); }
-.barseg { height: 100%; transition: width .15s; }
-.barseg.fb { background: #3b82f6; }
-.barseg.yt { background: #ef4444; }
-.legend { display: flex; gap: 16px; margin-top: 8px; font-size: 11px; color: var(--host-fg-muted); }
-.legend span { display: flex; align-items: center; gap: 5px; }
-.sw { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
-.sw.fb { background: #3b82f6; } .sw.yt { background: #ef4444; }
-.compare { margin-top: 20px; border-top: 1px solid var(--host-border); padding-top: 12px; }
-.crow { display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px; color: var(--host-fg-muted); }
-.crow strong { font-weight: 500; color: var(--host-fg); font-variant-numeric: tabular-nums; }
-.foot { margin-top: 14px; font-size: 11px; color: var(--host-fg-muted); line-height: 1.5; }
-@media (max-width: 560px) { .grid, .results { grid-template-columns: 1fr; } }
-</style>
-
 <script>
 (function(){
   var ids = ['fbv','fbq','fbr','ytv','yts','ytr','yss'];
@@ -145,3 +154,6 @@ input[type=range] { width: 100%; margin-top: 5px; accent-color: var(--host-prima
   calc();
 })();
 </script>
+
+</body>
+</html>
