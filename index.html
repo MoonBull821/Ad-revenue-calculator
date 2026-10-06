@@ -3,40 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Build in El Salvador — ad revenue model</title>
+<title>Ad Revenue Model — Build in El Salvador</title>
 <style>
-  body { background: #ffffff; margin: 0; padding: 24px 16px; display: flex; justify-content: center; }
-  #app { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; color: #111827; width: 100%; max-width: 700px; font-weight: 400; }
-  .presets { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
-  .pbtn { font-family: inherit; font-size: 12px; padding: 7px 12px; border-radius: 8px; border: 1px solid #e5e7eb; background: transparent; color: #6b7280; cursor: pointer; font-weight: 400; }
-  .pbtn.active { background: #3b82f6; color: #fff; border-color: #3b82f6; font-weight: 500; }
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .col { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px 16px 16px; }
-  .colhead { font-size: 13px; font-weight: 500; color: #111827; margin-bottom: 12px; }
-  .row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; }
-  .row label { font-size: 11px; color: #6b7280; }
-  .val { font-size: 12px; font-weight: 500; color: #111827; font-variant-numeric: tabular-nums; }
-  input[type=range] { width: 100%; margin-top: 5px; accent-color: #3b82f6; background: transparent; }
-  .note { font-size: 11px; color: #6b7280; margin-top: 12px; }
-  .results { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 18px; }
-  .rcard { border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px 14px; }
-  .rcard.primary { border-color: #3b82f6; }
-  .rlab { font-size: 11px; color: #6b7280; }
-  .rval { font-size: 24px; font-weight: 500; color: #111827; margin-top: 3px; font-variant-numeric: tabular-nums; }
-  .rsub { font-size: 11px; color: #6b7280; margin-top: 2px; }
-  .bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 16px; background: #f3f4f6; }
-  .barseg { height: 100%; transition: width .15s; }
-  .barseg.fb { background: #3b82f6; }
-  .barseg.yt { background: #ef4444; }
-  .legend { display: flex; gap: 16px; margin-top: 8px; font-size: 11px; color: #6b7280; }
-  .legend span { display: flex; align-items: center; gap: 5px; }
-  .sw { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
-  .sw.fb { background: #3b82f6; } .sw.yt { background: #ef4444; }
-  .compare { margin-top: 20px; border-top: 1px solid #e5e7eb; padding-top: 12px; }
-  .crow { display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px; color: #6b7280; }
-  .crow strong { font-weight: 500; color: #111827; font-variant-numeric: tabular-nums; }
-  .foot { margin-top: 14px; font-size: 11px; color: #6b7280; line-height: 1.5; }
-  @media (max-width: 560px) { .grid, .results { grid-template-columns: 1fr; } }
+:root {
+  --host-bg: #ffffff;
+  --host-fg: #111827;
+  --host-fg-muted: #6b7280;
+  --host-card: #f9fafb;
+  --host-card-fg: #111827;
+  --host-input: #ffffff;
+  --host-muted: #f3f4f6;
+  --host-border: #e5e7eb;
+  --host-border-hover: #d1d5db;
+  --host-primary: #3b82f6;
+  --host-secondary: #f3f4f6;
+  --host-secondary-fg: #111827;
+  --host-success: #22c55e;
+  --host-error: #ef4444;
+}
+body {
+  background: var(--host-bg);
+  margin: 0;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+}
 </style>
 </head>
 <body>
@@ -72,40 +63,89 @@
       <input type="range" id="yss" min="1" max="30" step="1" value="3">
       <div class="note" id="ytNote">60,000 long-form / 15,000 Shorts</div>
     </div>
+
+    <div class="col">
+      <div class="colhead">TikTok (US account)</div>
+      <div class="row"><label>Monthly views</label><span id="ttvOut" class="val">300,000</span></div>
+      <input type="range" id="ttv" min="50000" max="1000000" step="10000" value="300000">
+      <div class="row"><label>Qualified view rate</label><span id="ttqOut" class="val">70%</span></div>
+      <input type="range" id="ttq" min="20" max="90" step="1" value="70">
+      <div class="row"><label>RPM per 1,000 qualified</label><span id="ttrOut" class="val">$0.40</span></div>
+      <input type="range" id="ttr" min="20" max="200" step="1" value="40">
+      <div class="note" id="ttNote">~210,000 qualified views</div>
+    </div>
   </div>
 
   <div class="results">
     <div class="rcard"><div class="rlab">Facebook</div><div class="rval" id="rFb">$11</div><div class="rsub">per month</div></div>
     <div class="rcard"><div class="rlab">YouTube</div><div class="rval" id="rYt">$90</div><div class="rsub">per month</div></div>
-    <div class="rcard primary"><div class="rlab">Combined</div><div class="rval" id="rTot">$101</div><div class="rsub" id="rYr">$1,213 per year</div></div>
+    <div class="rcard"><div class="rlab">TikTok</div><div class="rval" id="rTt">$84</div><div class="rsub">per month</div></div>
+    <div class="rcard primary"><div class="rlab">Combined</div><div class="rval" id="rTot">$185</div><div class="rsub" id="rYr">$2,221 per year</div></div>
   </div>
 
   <div class="bar">
     <div class="barseg fb" id="barFb"></div>
     <div class="barseg yt" id="barYt"></div>
+    <div class="barseg tt" id="barTt"></div>
   </div>
   <div class="legend">
     <span><i class="sw fb"></i>Facebook</span>
     <span><i class="sw yt"></i>YouTube</span>
+    <span><i class="sw tt"></i>TikTok</span>
   </div>
 
   <div class="compare">
-    <div class="crow"><span>Ad revenue, annual</span><strong id="cAd">$1,213</strong></div>
+    <div class="crow"><span>Ad revenue, annual</span><strong id="cAd">$2,221</strong></div>
     <div class="crow"><span>One incorporation client at $2,500</span><strong>$2,500</strong></div>
     <div class="crow"><span>One residency package at $6,000</span><strong>$6,000</strong></div>
     <div class="crow"><span>One real estate commission at $15,000</span><strong>$15,000</strong></div>
   </div>
-  <div class="foot">RPM ranges are modelled from publicly reported creator data, not official figures. Neither Meta nor Google publishes RPM by country or niche. Treat as an order-of-magnitude model.</div>
+  <div class="foot">RPM ranges are modelled from publicly reported creator data, not official figures. Neither Meta, Google, nor TikTok publishes RPM by country or niche. TikTok Creator Rewards requires a Personal account, 10,000+ followers, 100,000+ views/30 days, videos 1 minute or longer, and is capped at 1,000,000 views/month in this model as a thought-exercise ceiling, not a platform limit. Treat as an order-of-magnitude model.</div>
 </div>
+
+<style>
+#app { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; color: var(--host-fg); width: 100%; max-width: 700px; font-weight: 400; }
+.presets { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+.pbtn { font-family: inherit; font-size: 12px; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--host-border); background: transparent; color: var(--host-fg-muted); cursor: pointer; font-weight: 400; }
+.pbtn.active { background: var(--host-primary); color: #fff; border-color: var(--host-primary); font-weight: 500; }
+.grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.col { background: var(--host-card); border: 1px solid var(--host-border); border-radius: 12px; padding: 14px 14px 16px; }
+.colhead { font-size: 13px; font-weight: 500; color: var(--host-fg); margin-bottom: 12px; }
+.row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; gap: 6px; }
+.row label { font-size: 11px; color: var(--host-fg-muted); }
+.val { font-size: 12px; font-weight: 500; color: var(--host-fg); font-variant-numeric: tabular-nums; white-space: nowrap; }
+input[type=range] { width: 100%; margin-top: 5px; accent-color: var(--host-primary); background: transparent; }
+.note { font-size: 11px; color: var(--host-fg-muted); margin-top: 12px; }
+.results { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin-top: 18px; }
+.rcard { border: 1px solid var(--host-border); border-radius: 12px; padding: 12px 14px; }
+.rcard.primary { border-color: var(--host-primary); }
+.rlab { font-size: 11px; color: var(--host-fg-muted); }
+.rval { font-size: 22px; font-weight: 500; color: var(--host-fg); margin-top: 3px; font-variant-numeric: tabular-nums; }
+.rsub { font-size: 11px; color: var(--host-fg-muted); margin-top: 2px; }
+.bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 16px; background: var(--host-muted); }
+.barseg { height: 100%; transition: width .15s; }
+.barseg.fb { background: #3b82f6; }
+.barseg.yt { background: #ef4444; }
+.barseg.tt { background: #a855f7; }
+.legend { display: flex; gap: 16px; margin-top: 8px; font-size: 11px; color: var(--host-fg-muted); flex-wrap: wrap; }
+.legend span { display: flex; align-items: center; gap: 5px; }
+.sw { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+.sw.fb { background: #3b82f6; } .sw.yt { background: #ef4444; } .sw.tt { background: #a855f7; }
+.compare { margin-top: 20px; border-top: 1px solid var(--host-border); padding-top: 12px; }
+.crow { display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px; color: var(--host-fg-muted); }
+.crow strong { font-weight: 500; color: var(--host-fg); font-variant-numeric: tabular-nums; }
+.foot { margin-top: 14px; font-size: 11px; color: var(--host-fg-muted); line-height: 1.5; }
+@media (max-width: 620px) { .grid, .results { grid-template-columns: 1fr; } }
+</style>
 
 <script>
 (function(){
-  var ids = ['fbv','fbq','fbr','ytv','yts','ytr','yss'];
+  var ids = ['fbv','fbq','fbr','ytv','yts','ytr','yss','ttv','ttq','ttr'];
   var el = {}; ids.forEach(function(i){ el[i] = document.getElementById(i); });
   var presets = [
-    { fbr: 8,   ytr: 150,  yss: 3,  fbq: 45, yts: 80 },
-    { fbr: 50,  ytr: 600,  yss: 8,  fbq: 48, yts: 80 },
-    { fbr: 150, ytr: 1600, yss: 15, fbq: 50, yts: 85 }
+    { fbr: 8,   ytr: 150,  yss: 3,  fbq: 45, yts: 80, ttr: 40,  ttq: 65 },
+    { fbr: 50,  ytr: 600,  yss: 8,  fbq: 48, yts: 80, ttr: 70,  ttq: 70 },
+    { fbr: 150, ytr: 1600, yss: 15, fbq: 50, yts: 85, ttr: 150, ttq: 75 }
   ];
   function money(n){
     if (n >= 100) return '$' + Math.round(n).toLocaleString();
@@ -115,31 +155,48 @@
   function calc(){
     var fbv = +el.fbv.value, fbq = +el.fbq.value, fbr = +el.fbr.value / 100;
     var ytv = +el.ytv.value, yts = +el.yts.value, ytr = +el.ytr.value / 100, yss = +el.yss.value / 100;
+    var ttv = +el.ttv.value, ttq = +el.ttq.value, ttr = +el.ttr.value / 100;
+
     var qualified = fbv * fbq / 100;
     var fbRev = qualified / 1000 * fbr;
+
     var longV = ytv * yts / 100, shortV = ytv - longV;
     var ytRev = longV / 1000 * ytr + shortV / 1000 * yss;
-    var tot = fbRev + ytRev;
+
+    var ttQualified = ttv * ttq / 100;
+    var ttRev = ttQualified / 1000 * ttr;
+
+    var tot = fbRev + ytRev + ttRev;
 
     document.getElementById('fbvOut').textContent = fbv.toLocaleString();
     document.getElementById('fbqOut').textContent = fbq + '%';
     document.getElementById('fbrOut').textContent = '$' + fbr.toFixed(2);
     document.getElementById('fbNote').textContent = '~' + Math.round(qualified).toLocaleString() + ' qualified views';
+
     document.getElementById('ytvOut').textContent = ytv.toLocaleString();
     document.getElementById('ytsOut').textContent = yts + '%';
     document.getElementById('ytrOut').textContent = '$' + ytr.toFixed(2);
     document.getElementById('yssOut').textContent = '$' + yss.toFixed(2);
     document.getElementById('ytNote').textContent = Math.round(longV).toLocaleString() + ' long-form / ' + Math.round(shortV).toLocaleString() + ' Shorts';
 
+    document.getElementById('ttvOut').textContent = ttv.toLocaleString();
+    document.getElementById('ttqOut').textContent = ttq + '%';
+    document.getElementById('ttrOut').textContent = '$' + ttr.toFixed(2);
+    document.getElementById('ttNote').textContent = '~' + Math.round(ttQualified).toLocaleString() + ' qualified views';
+
     document.getElementById('rFb').textContent = money(fbRev);
     document.getElementById('rYt').textContent = money(ytRev);
+    document.getElementById('rTt').textContent = money(ttRev);
     document.getElementById('rTot').textContent = money(tot);
     document.getElementById('rYr').textContent = money(tot * 12) + ' per year';
     document.getElementById('cAd').textContent = money(tot * 12);
 
     var pf = tot > 0 ? fbRev / tot * 100 : 0;
+    var py = tot > 0 ? ytRev / tot * 100 : 0;
+    var pt = tot > 0 ? ttRev / tot * 100 : 0;
     document.getElementById('barFb').style.width = pf + '%';
-    document.getElementById('barYt').style.width = (100 - pf) + '%';
+    document.getElementById('barYt').style.width = py + '%';
+    document.getElementById('barTt').style.width = pt + '%';
   }
   ids.forEach(function(i){ el[i].addEventListener('input', calc); });
   document.querySelectorAll('.pbtn').forEach(function(b){
@@ -147,7 +204,7 @@
       document.querySelectorAll('.pbtn').forEach(function(x){ x.classList.remove('active'); });
       b.classList.add('active');
       var p = presets[+b.dataset.p];
-      Object.keys(p).forEach(function(k){ el[k].value = p[k]; });
+      Object.keys(p).forEach(function(k){ if (el[k]) el[k].value = p[k]; });
       calc();
     });
   });
